@@ -1,8 +1,10 @@
 //
 const Hangman = function(word, remainingGuesses) {
-  (this.word = word.toLowerCase().split('')),
-    (this.remainingGuesses = remainingGuesses),
-    (this.guessedLetters = []);
+  this.word = word.toLowerCase().split('');
+  console.log(this.word);
+  this.remainingGuesses = remainingGuesses;
+  this.guessedLetters = [];
+  this.status = 'playing';
 };
 
 Hangman.prototype.getPuzzle = function() {
@@ -16,6 +18,27 @@ Hangman.prototype.getPuzzle = function() {
   });
 
   return puzzle;
+};
+
+Hangman.prototype.getStatus = function() {
+  let finished = true;
+  this.word.forEach(letter => {
+    if (this.guessedLetters.includes(letter)) {
+      finished = true;
+    } else {
+      finished = false;
+      console.log('finishhed');
+    }
+  });
+
+  if (this.remainingGuesses === 0) {
+    this.status = 'failed';
+    console.log('failed ');
+  } else if (finished) {
+    this.status = 'finished';
+  } else {
+    this.status = 'playing  ';
+  }
 };
 
 Hangman.prototype.makeGuess = function(guessedLetter) {

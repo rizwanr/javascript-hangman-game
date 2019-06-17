@@ -10,4 +10,5 @@ window.addEventListener('keypress', function(event) {
   var guess = String.fromCharCode(event.charCode);
   game1.makeGuess(guess);
   puzzelEl.textContent = game1.getPuzzle();
+  game1.getStatus();
 });
