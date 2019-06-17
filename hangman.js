@@ -20,36 +20,48 @@ Hangman.prototype.getPuzzle = function() {
   return puzzle;
 };
 
-Hangman.prototype.getStatus = function() {
+Hangman.prototype.calculateStatus = function() {
   let finished = true;
   this.word.forEach(letter => {
     if (this.guessedLetters.includes(letter)) {
-      finished = true;
     } else {
       finished = false;
-      console.log('finishhed');
     }
   });
 
   if (this.remainingGuesses === 0) {
     this.status = 'failed';
-    console.log('failed ');
   } else if (finished) {
     this.status = 'finished';
   } else {
-    this.status = 'playing  ';
+    this.status = 'playing';
+  }
+};
+
+Hangman.prototype.getStatusMessage = function() {
+  if (this.status === 'playing') {
+    return `Guesses left: ${this.remainingGuesses}`;
+  } else if (this.status === 'failed') {
+    return `Nice try ! The word was "${this.word.join('')}".`;
+  } else {
+    return `Great work! You gussed the word`;
   }
 };
 
 Hangman.prototype.makeGuess = function(guessedLetter) {
-  const isUnique = this.word.includes(guessedLetter);
-  const isBadGuess = !guessedLetter.includes(this.word, 0);
+  const isUnique = !this.guessedLetters.includes(guessedLetter);
+  const isBadGuess = !this.word.includes(guessedLetter);
+
+  if (this.status !== 'playing') {
+    return;
+  }
   if (isUnique) {
     this.guessedLetters.push(guessedLetter);
-    console.log(this.guessedLetters);
-  } else {
-    if (isBadGuess) {
-      this.remainingGuesses--;
-    }
   }
+
+  if (isBadGuess && isUnique) {
+    this.remainingGuesses--;
+  }
+
+  this.calculateStatus();
 };
